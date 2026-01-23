@@ -1,0 +1,10 @@
+{% extends "appointments/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h2>Reserva confirmada</h2>
+    <p class="muted">Tu reserva fue registrada correctamente.</p>
+    <p><strong>ID de reserva:</strong> {{ booking_id }}</p>
+    <p><a class="btn" href="{% url 'appointments:service_list' %}">Volver a servicios</a></p>
+  </div>
+{% endblock %}

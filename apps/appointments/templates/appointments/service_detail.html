@@ -1,0 +1,26 @@
+{% extends "appointments/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h2>{{ service.name }}</h2>
+    <p class="muted">Duración: {{ service.duration_minutes }} min</p>
+    <p><a href="{% url 'appointments:service_list' %}">← Volver</a></p>
+  </div>
+
+  <div class="card">
+    <h3>Próximos horarios disponibles</h3>
+    {% for slot in available_slots %}
+      <div class="row" style="padding:10px 0; border-bottom:1px solid #eef1f4;">
+        <div>
+          <strong>{{ slot.start_at }}</strong><br>
+          <span class="muted">{{ slot.get_status_display }}</span>
+        </div>
+        <div>
+          <a class="btn" href="{% url 'appointments:booking_create' slot.id %}">Reservar</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="muted">No hay slots disponibles por ahora.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

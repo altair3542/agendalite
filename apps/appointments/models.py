@@ -113,3 +113,4 @@ class Booking(models.Model):
 
     def __str__(self) -> str:
         return f"{self.customer_name} - {self.service.name} @ {self.slot.start_at:%Y-%m-%d %H:%M}"
+

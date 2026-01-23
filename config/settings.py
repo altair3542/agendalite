@@ -56,7 +56,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # Incluimos explícitamente el directorio de plantillas de la app
+        # para asegurar la resolución en entornos donde APP_DIRS no detecta
+        # las plantillas del paquete local.
+        'DIRS': [BASE_DIR / 'apps' / 'appointments' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

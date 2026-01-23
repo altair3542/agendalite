@@ -1,0 +1,43 @@
+{% extends "appointments/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h2>Reservar horario</h2>
+    <p class="muted">
+      Completa tus datos para reservar. Si el horario ya no está disponible, verás un mensaje.
+    </p>
+  </div>
+
+  <div class="card">
+    <form method="post">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="errors">
+          {% for err in form.non_field_errors %}
+            <div>{{ err }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div style="margin: 12px 0;">
+        <label><strong>{{ form.customer_name.label }}</strong></label>
+        {{ form.customer_name }}
+        {% for err in form.customer_name.errors %}
+          <div class="muted" style="color:#b42318;">{{ err }}</div>
+        {% endfor %}
+      </div>
+
+      <div style="margin: 12px 0;">
+        <label><strong>{{ form.customer_email.label }}</strong></label>
+        {{ form.customer_email }}
+        {% for err in form.customer_email.errors %}
+          <div class="muted" style="color:#b42318;">{{ err }}</div>
+        {% endfor %}
+      </div>
+
+      <button class="btn" type="submit">Confirmar reserva</button>
+      <a style="margin-left:10px;" href="{% url 'appointments:service_list' %}">Cancelar</a>
+    </form>
+  </div>
+{% endblock %}
