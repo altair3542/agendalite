@@ -38,4 +38,3 @@ class BookingRequestForm(forms.Form):
             raise forms.ValidationError("ESte servicio no esta disponible")
 
         return cleaned
-
