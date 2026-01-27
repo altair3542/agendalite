@@ -21,7 +21,7 @@ class BookingRequestForm(forms.Form):
         widget=forms.EmailInput(attrs={"class": "input", "placeholder": "tu@correo.com"}),
     )
 
-    def __init__(self, *args, slot: TimeSlot, **kwarg):
+    def __init__(self, *args, slot: TimeSlot, **kwargs):
         super().__init__(*args, **kwargs)
         self.slot = slot
 
