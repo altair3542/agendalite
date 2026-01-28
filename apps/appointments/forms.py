@@ -31,10 +31,10 @@ class BookingRequestForm(forms.Form):
         if self.slot.start_at < timezone.now():
             raise forms.ValidationError("Este slot ya paso, elige uno diferente.")
 
-        if self.slot.status != TimeSlot.AVAILABLE:
+        if self.slot.status != TimeSlot.Status.AVAILABLE:
             raise forms.ValidationError("este slot ya no esta disponible.")
 
-        if self.slot.service.can_be_booked():
+        if not self.slot.service.can_be_booked():
             raise forms.ValidationError("ESte servicio no esta disponible")
 
         return cleaned

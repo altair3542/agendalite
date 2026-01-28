@@ -16,6 +16,9 @@ class ServiceNotBookableError(Exception):
     pass
 
 
+class BoookingNotCancelableError(Exception):
+    pass
+
 @dataclass(frozen=True)
 class CreateBookingResult:
     booking: Booking
@@ -61,3 +64,28 @@ class BookingService:
         )
 
         return CreateBookingResult(booking=booking, slot=slot)
+
+    @staticmethod
+    @transaction.atomic
+    def cancel_booking(*, booking_id: int) -> Booking:
+        """
+        Cancelación MVP:
+        - Booking pasa a CANCELED
+        - Slot se mantiene BOOKED (por modelado OneToOne actual)
+        """
+        booking = Booking.objects.select_related("slot", "service").get(id=booking_id)
+
+        if booking.status == Booking.Status.CANCELED:
+            raise BoookingNotCancelableError("La reserva ya esta cancelada")
+
+        # regla simple si quisieramos podriamos prohibir la cancelacion si ya paso la hora.
+
+        if booking.slot.start_at < timezone.now():
+            raise BoookingNotCancelableError("No se puede cancelar una reserva que ya paso")
+
+        booking.cancel()
+        booking.save(update_fields=["status"])
+
+        return booking
+
+    
