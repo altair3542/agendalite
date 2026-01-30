@@ -88,4 +88,18 @@ class BookingService:
 
         return booking
 
-    
+
+    @staticmethod
+    @transaction.atomic
+    def cancel_booking_for_customer(*, booking_id: int, customer_email: str) -> Booking:
+        """
+        Cancelación desde UI (sin login):
+        - Solo permitimos cancelar si el correo coincide con el de la reserva.
+        - Luego delegamos a cancel_booking() para aplicar reglas de negocio.
+        """
+        booking = Booking.objects.only("id", "customer_email").get(id=booking_id)
+
+        if booking.customer_email.strip().lower() != customer_email.strip().lower():
+            raise BookingNotCancelableError("No puedes cancelar esta reserva con ese correo.")
+
+        return BookingService.cancel_booking(booking_id=booking_id)

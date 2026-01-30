@@ -3,7 +3,7 @@ from __future__ import annotations
 from django import forms
 from django.utils import timezone
 
-from apps.appointments.models import TimeSlot
+from apps.appointments.models import TimeSlot, Booking
 
 class BookingRequestForm(forms.Form):
     """
@@ -38,3 +38,35 @@ class BookingRequestForm(forms.Form):
             raise forms.ValidationError("ESte servicio no esta disponible")
 
         return cleaned
+
+
+class MyBookingsFilterForm(forms.Form):
+    """
+    Form de filtros por GET para /my-bookings/.
+    No crea nada. Solo valida parámetros de búsqueda.
+    """
+
+    email = forms.EmailField(
+        required=True,
+        label="correo",
+        widget=forms.EmailInput(attrs={"class": "input", "placeholder": "tu@correo.com"})
+    )
+
+    status = forms.ChoiceField(
+        required=False,
+        label="Estado",
+        choices=[("", "Todos")] + list(Booking.Status.choices),
+        widget=forms.Select(attrs={"class": "input"}),
+    )
+
+    date_from = forms.DateField(
+        required=False,
+        label="Desde (YYYY-MM-DD)",
+        widget=forms.DateInput(attrs={"class": "input", "placeholder": "2026-01-01" }),
+    )
+
+    date_to = forms.DateField(
+        required=False,
+        label="Desde (YYYY-MM-DD)",
+        widget=forms.DateInput(attrs={"class": "input", "placeholder": "2026-01-31" }),
+    )
